@@ -1,4 +1,6 @@
 
+//Ignore essa classe por enquanto, a interface do marco 2 é a InterfaceProvisória
+
 package ui;
 
 import java.util.Scanner;
