@@ -2,12 +2,6 @@ package beans;
 
 import java.util.ArrayList;
 
-/*
- * Algumas dúvidas:
- * - Nos métodos setters o código recebe a senha como argumento, 
- * 		seria melhor o próprio metodo pedir essa senha para verificá-la?
- */
-
 public class Usuario {
 
 	private String login;
