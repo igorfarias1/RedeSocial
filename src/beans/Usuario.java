@@ -2,6 +2,8 @@ package beans;
 
 import java.util.ArrayList;
 
+//T
+
 public class Usuario {
 
 	private String login;
