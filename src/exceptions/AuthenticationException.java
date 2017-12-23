@@ -1,9 +1,14 @@
 package exceptions;
 
-public class AuthenticationException extends Exception{
+import java.io.IOException;
+
+public class AuthenticationException extends IOException{
+	
+	public AuthenticationException() {
+		super("Erro de autenticação");
+	}
 	
 	public AuthenticationException(String message) {
-		super(message);
+		super("Erro de autenticação: " + message);
 	}
-
 }

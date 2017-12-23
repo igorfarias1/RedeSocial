@@ -1,6 +1,7 @@
 package controllers;
 
 import beans.Usuario;
+import exceptions.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,18 +51,29 @@ public class DAOUsuario {
 	}
 
 	// Método que recebe, por questão de segurança, o login e a senha do usuário
-	public void excluirUsuario(String login, String senha) {
+	public void excluirUsuario(String login, String senha) throws AuthenticationException {
 		// abrindo a conexão com o BD
 		conexao.conectar();
-
+		
 		try {
+			//A
+			
+			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.usuario WHERE login = '" + login + "' AND senha = '" + senha + "';");
+			
+			if(!resultado.next())
+				throw new AuthenticationException("não foi possível excluir o usuário.");
+			else
+				System.out.println("Usuário excluído.");
+			
 			// Os comandos SQL verificam se login E a senha correspondem
-			// ao informado no menuExcluir() da UserInterface
+			// ao que foi informado no menuExcluir() da UserInterface
 			PreparedStatement stm = conexao.getConexao()
 					.prepareStatement("DELETE FROM beans.usuario WHERE login = ? AND senha = ?;");
 			stm.setString(1, login);
 			stm.setString(2, senha);
 			stm.execute();
+			
+			
 		} catch (SQLException e) {
 			System.out.println("Erro: " + e.getMessage());
 		} finally {
@@ -94,10 +106,13 @@ public class DAOUsuario {
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro: " + e.getMessage());
+		} finally {
+			conexao.desconectar();
 		}
 
 		return usuarios;
 	}
+	
 
 	// LEMBRAR: Os proximos metodos (buscarUsuario, editar, remover...) estão
 	// salvos no email para serem ajeitados nos proximos marcos.

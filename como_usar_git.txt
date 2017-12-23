@@ -1,0 +1,4 @@
+git pull - pra puxar tudo que tem lá
+git add .
+git commit -m "" - pra deixar pronto pra ser enviado
+git push origin master - pra empurrar tudo pra lá

@@ -2,8 +2,6 @@ package beans;
 
 import java.util.ArrayList;
 
-//T
-
 public class Usuario {
 
 	private String login;
@@ -78,7 +76,8 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return login + " - " + primeiroNome + " " + sobrenome;
+		return this.getLogin() + " - " + this.getPrimeiroNome() + " " + this.getSobrenome() 
+		+ "\ne-mail: " + this.getEmail() + "\nProfissão: " + this.getProfissao();
 	}
 
 }
