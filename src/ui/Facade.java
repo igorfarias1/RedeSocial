@@ -14,17 +14,17 @@ public class Facade {
 		conexaoUsuario.criarUsuario(novoUsuario);
 	}
 
-	public void excluir(String login, String senha) {
-		try {
-			conexaoUsuario.excluirUsuario(login, senha);
-		} catch (AuthenticationException e) {
-			System.out.println(e.getMessage());
-		}
+	public void excluir(String login, String senha) throws AuthenticationException {
+		conexaoUsuario.excluirUsuario(login, senha);
 	}
 
 	public ArrayList<Usuario> buscarUsuario(String busca) {
 		return conexaoUsuario.buscarUsuario(busca);
 
+	}
+
+	public void login(String login, String senha) throws AuthenticationException {
+		conexaoUsuario.validarLogin(login, senha);
 	}
 
 }

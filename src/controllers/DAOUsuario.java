@@ -19,6 +19,7 @@ public class DAOUsuario {
 		this.conexao = new ConexaoBD();
 	}
 
+	// Cria um usuário no Banco de Dados
 	public void criarUsuario(Usuario p) {
 		// abrindo a conexão com o BD
 		conexao.conectar();
@@ -51,6 +52,8 @@ public class DAOUsuario {
 	}
 
 	// Método que recebe, por questão de segurança, o login e a senha do usuário
+	// Exclui um usuário do banco de dados e lança uma checked exception, caso não seja encontrado usuário 
+	// com o login informado ou o login e a senha informados não correspondam
 	public void excluirUsuario(String login, String senha) throws AuthenticationException {
 		// abrindo a conexão com o BD
 		conexao.conectar();
@@ -82,8 +85,9 @@ public class DAOUsuario {
 		}
 	}
 
+	// Busca um usuário por parte do seu nome, sobrenome ou login
 	public ArrayList<Usuario> buscarUsuario(String palavraDeBusca) {
-		// Busca um usuário por parte do seu nome, sobrenome ou login
+		
 		conexao.conectar();
 		ArrayList<Usuario> usuarios = new ArrayList<>();
 
@@ -113,7 +117,24 @@ public class DAOUsuario {
 		return usuarios;
 	}
 	
+	// Verifica se um login e uma senha correspondem e lança uma checked exception (AuthenticationException),
+	// caso não seja encontrado usuário com o login informado ou o login e a senha informados não correspondam
+	public void validarLogin(String login, String senha) throws AuthenticationException{
+		conexao.conectar();
+		
+		try {
+			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.usuario WHERE login = '" + login +"' AND senha = '" + senha + "';");
+			if(!resultado.next()) {
+				throw new AuthenticationException("não foi possível fazer login.");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			conexao.desconectar();
+		}
+		
+		
+	}
 
-	// LEMBRAR: Os proximos metodos (buscarUsuario, editar, remover...) estão
-	// salvos no email para serem ajeitados nos proximos marcos.
+	
 }

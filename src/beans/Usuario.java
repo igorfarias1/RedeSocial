@@ -76,8 +76,8 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return this.getLogin() + " - " + this.getPrimeiroNome() + " " + this.getSobrenome() 
-		+ "\ne-mail: " + this.getEmail() + "\nProfissão: " + this.getProfissao();
+		return "\n" + this.getLogin() + " - " + this.getPrimeiroNome() + " " + this.getSobrenome() 
+		+ "\ne-mail: " + this.getEmail() + "\nProfissão: " + this.getProfissao() + "\n";
 	}
 
 }
