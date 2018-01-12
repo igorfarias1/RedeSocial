@@ -14,8 +14,7 @@ public class DAOUsuario {
 	public DAOUsuario() {
 		// cria o objeto para conexão com banco, porém não o inicializa
 		// a conexão deve ser aberta e, consequentemente, fechada durante o envio de
-		// comandos
-		// ao banco
+		// comandos ao banco
 		this.conexao = new ConexaoBD();
 	}
 
@@ -133,8 +132,9 @@ public class DAOUsuario {
 			conexao.desconectar();
 		}
 		
-		
 	}
+	
+	
 
 	
 }

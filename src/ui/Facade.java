@@ -8,23 +8,19 @@ import java.util.ArrayList;
 public class Facade {
 
 	private DAOUsuario conexaoUsuario = new DAOUsuario();
-
-	public void cadastrar(String login, String senha, String email, String nome, String sobrenome, String profissao) {
-		Usuario novoUsuario = new Usuario(login, senha, email, nome, sobrenome, profissao);
-		conexaoUsuario.criarUsuario(novoUsuario);
-	}
-
-	public void excluir(String login, String senha) throws AuthenticationException {
-		conexaoUsuario.excluirUsuario(login, senha);
-	}
-
-	public ArrayList<Usuario> buscarUsuario(String busca) {
-		return conexaoUsuario.buscarUsuario(busca);
-
-	}
+	private DAOAmizade conexaoAmizade = new DAOAmizade();
+	private Usuario usuarioLogado = new Usuario();
 
 	public void login(String login, String senha) throws AuthenticationException {
 		conexaoUsuario.validarLogin(login, senha);
+		usuarioLogado.setLogin(login);
+		usuarioLogado.setSenha(senha);
+		
+	}
+	
+	public void addAmigo(String loginAmigo) {
+		conexaoAmizade.adicionarAmigo(usuarioLogado.getLogin(), loginAmigo);
+		
 	}
 
 }

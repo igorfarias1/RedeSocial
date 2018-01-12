@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class UserInterface {
 	private Scanner leitor = new Scanner(System.in);
 	private Facade fachada = new Facade();
+	private FacadeNoLogin fachadaNoLogin = new FacadeNoLogin();
 
 	public void menuInicial() {
 		String opcao = "";
@@ -70,7 +71,7 @@ public class UserInterface {
 		System.out.print("Profissão: ");
 		String profissao = leitor.nextLine();
 
-		fachada.cadastrar(login, senha, email, nome, sobrenome, profissao);
+		fachadaNoLogin.cadastrar(login, senha, email, nome, sobrenome, profissao);
 
 	}
 
@@ -89,14 +90,14 @@ public class UserInterface {
 		// integrando as classes Usuario e DAOUsuario
 
 		try {
-			fachada.excluir(login, senha);
+			fachadaNoLogin.excluir(login, senha);
 		} catch (AuthenticationException e) {
 			System.out.println(e.getMessage());
 		}
 
 	}
 
-	// Menu ativado quando o usuario digita 3 no menu inicial
+	// Menu ativado quando o usuario digita 3 no menu inicial ou digita 1 no menuLogin
 	public void menuBuscar() {
 		// Busca um usuário por parte do seu nome, sobrenome ou login
 
@@ -104,7 +105,7 @@ public class UserInterface {
 		String palavra = leitor.nextLine();
 
 		// Salva o resultado da busca em um ArrayList<Usuario> e imprime o resultado
-		ArrayList resultado = fachada.buscarUsuario(palavra);
+		ArrayList resultado = fachadaNoLogin.buscarUsuario(palavra);
 		System.out.println(resultado);
 	}
 
@@ -125,6 +126,7 @@ public class UserInterface {
 			while (opcao != "sair") {
 				System.out.println("");
 				System.out.println("1 - Buscar por usuário");
+				System.out.println("2 - Adicionar amigo");
 				System.out.println("sair - Encerrar a sessão");
 				System.out.print("Escolha uma opção: ");
 				opcao = leitor.nextLine();
@@ -132,6 +134,9 @@ public class UserInterface {
 				switch (opcao) {
 				case ("1"):
 					menuBuscar();
+					break;
+				case ("2"):
+					menuAdd();
 					break;
 				case ("sair"):
 					opcao = "sair";
@@ -145,6 +150,18 @@ public class UserInterface {
 			System.out.println(e.getMessage());
 		}
 
+	}
+	
+	//Menu ativado a partir do menuLogin (opção 2)
+	public void menuAdd() {
+		//Adiciona um usuário a lista de amigos do usuário logado
+		
+		System.out.println("");
+		System.out.print("Digite o login do seu novo amigo: ");
+		String login = leitor.nextLine();
+		
+		fachada.addAmigo(login);
+		
 	}
 
 }
