@@ -58,7 +58,6 @@ public class DAOUsuario {
 		conexao.conectar();
 		
 		try {
-			//A
 			
 			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.usuario WHERE login = '" + login + "' AND senha = '" + senha + "';");
 			
@@ -113,6 +112,7 @@ public class DAOUsuario {
 			conexao.desconectar();
 		}
 
+		
 		return usuarios;
 	}
 	

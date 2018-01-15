@@ -18,9 +18,18 @@ public class Facade {
 		
 	}
 	
-	public void addAmigo(String loginAmigo) {
+	public void addAmigo(String loginAmigo) throws UserNotFoundException {
 		conexaoAmizade.adicionarAmigo(usuarioLogado.getLogin(), loginAmigo);
-		
 	}
+	
+	public void removerAmigo(String loginAmigo) throws UserNotFoundException {
+		conexaoAmizade.removerAmigo(usuarioLogado.getLogin(), loginAmigo);
+	}
+	
+	public ArrayList<Usuario> verAmigos() {
+		return conexaoAmizade.listarAmigos(usuarioLogado.getLogin());
+	}
+	
+
 
 }

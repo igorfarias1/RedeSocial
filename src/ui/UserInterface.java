@@ -1,9 +1,7 @@
 package ui;
 
 import java.util.Scanner;
-
-import exceptions.AuthenticationException;
-
+import exceptions.*;
 import java.util.ArrayList;
 
 public class UserInterface {
@@ -26,16 +24,16 @@ public class UserInterface {
 
 			switch (opcao) {
 			case ("1"):
-				menuCadastro();
+				interfaceCadastro();
 				break;
 			case ("2"):
 				menuLogin();
 				break;
 			case ("3"):
-				menuExcluir();
+				interfaceExcluir();
 				break;
 			case ("4"):
-				menuBuscar();
+				interfaceBuscar();
 				break;
 			case ("sair"):
 				opcao = "sair";
@@ -47,8 +45,8 @@ public class UserInterface {
 		}
 	}
 
-	// Menu ativado quando o usuário digita 1 no menu inicial.
-	public void menuCadastro() {
+	// Método ativado quando o usuário digita 1 no menu inicial.
+	public void interfaceCadastro() {
 		// Recebe os dados do usuario e envia para facade
 		// que terá a responsabilidade de integrar as outras classes do sistema
 
@@ -75,9 +73,9 @@ public class UserInterface {
 
 	}
 
-	// Menu ativado quando o usuário digita 2 no menu inicial
-	public void menuExcluir() {
-		// Método que para excluir um usuário requer seu login e senha
+	// Método ativado quando o usuário digita 3 no menu inicial
+	public void interfaceExcluir() {
+		// Método que pede seu login e senha para excluir a sua conta
 
 		System.out.println("Excluir sua conta!");
 		System.out.print("Digite seu login: ");
@@ -97,8 +95,9 @@ public class UserInterface {
 
 	}
 
-	// Menu ativado quando o usuario digita 3 no menu inicial ou digita 1 no menuLogin
-	public void menuBuscar() {
+	// Método ativado quando o usuario digita 4 no menu inicial ou digita 1 no
+	// menuLogin
+	public void interfaceBuscar() {
 		// Busca um usuário por parte do seu nome, sobrenome ou login
 
 		System.out.print("Digite parte do nome, sobrenome ou login: ");
@@ -109,7 +108,7 @@ public class UserInterface {
 		System.out.println(resultado);
 	}
 
-	// Menu ativado quando o usuario digita 3 no menu inicial
+	// Menu ativado quando o usuario digita 2 no menu inicial
 	public void menuLogin() {
 		// Loga o usuário e apresenta um sub menu com diversas opções
 
@@ -126,17 +125,17 @@ public class UserInterface {
 			while (opcao != "sair") {
 				System.out.println("");
 				System.out.println("1 - Buscar por usuário");
-				System.out.println("2 - Adicionar amigo");
+				System.out.println("2 - Amizades");
 				System.out.println("sair - Encerrar a sessão");
 				System.out.print("Escolha uma opção: ");
 				opcao = leitor.nextLine();
 
 				switch (opcao) {
 				case ("1"):
-					menuBuscar();
+					interfaceBuscar();
 					break;
 				case ("2"):
-					menuAdd();
+					menuAmizades();
 					break;
 				case ("sair"):
 					opcao = "sair";
@@ -151,17 +150,74 @@ public class UserInterface {
 		}
 
 	}
-	
-	//Menu ativado a partir do menuLogin (opção 2)
-	public void menuAdd() {
-		//Adiciona um usuário a lista de amigos do usuário logado
-		
+
+	// Menu que apresenta opções referentes aos amigos (adicionar, remover e listar)
+	public void menuAmizades() {
+		String opcao = "";
+
+		while (opcao != "sair") {
+			System.out.println("");
+			System.out.println("1 - Adicionar amigo");
+			System.out.println("2 - Remover amigo");
+			System.out.println("3 - Listar amigos");
+			System.out.println("sair - Voltar ao menu inicial");
+			System.out.print("Escolha uma opção: ");
+			opcao = leitor.nextLine();
+
+			switch (opcao) {
+			case ("1"):
+				interfaceAdd();
+				break;
+			case ("2"):
+				interfaceRemover();
+				break;
+			case ("3"):
+				interfaceVerAmigos();
+			case ("sair"):
+				opcao = "sair";
+				break;
+			default:
+				System.out.println("Opção inválida.");
+			}
+		}
+	}
+
+	// Método ativado a partir do menuAmizades (opção 1)
+	public void interfaceAdd() {
+		// Adiciona um usuário a lista de amigos do usuário logado
+
 		System.out.println("");
 		System.out.print("Digite o login do seu novo amigo: ");
 		String login = leitor.nextLine();
-		
-		fachada.addAmigo(login);
-		
+
+		try {
+			fachada.addAmigo(login);
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+	// Método ativado a partir do menuAmizades (opção 2)
+	public void interfaceRemover() {
+		// Remove um usuário da sua lista de amigos
+
+		System.out.println("");
+		System.out.print("Digite o login do amigo que você quer remover: ");
+		String login = leitor.nextLine();
+
+		try {
+			fachada.removerAmigo(login);
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+	//Método ativado a partir do menuAmizades (opção 3)
+	public void interfaceVerAmigos() {
+		// Imprime todos os amigos de um usuário
+		System.out.println(fachada.verAmigos());
 	}
 
 }
