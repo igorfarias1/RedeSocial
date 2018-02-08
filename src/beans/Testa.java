@@ -4,13 +4,16 @@ public class Testa {
 
 	public static void main(String[] args) {
 		
-		Poema p = new Poema();
+		Mensagem m = new Mensagem();
+		Usuario u1 = new Usuario();
+		u1.setLogin("lukinho");
+		Usuario u2 = new Usuario();
+		u2.setLogin("kyloren");
+		m.setTexto("oi sumido rs");
+		m.setRemetente(u1);
+		m.setDestinatario(u2);
 		
-		p.setTitulo("Minha terra tem palmeiras.");
-		
-		p.setEscopo("Minha terra tem palmeiras\nOnde canta o sabiá");
-		
-		System.out.println(p);
+		System.out.println(m);
 		
 	}
 
