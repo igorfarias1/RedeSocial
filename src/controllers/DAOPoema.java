@@ -6,6 +6,8 @@ import beans.Poema;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 public class DAOPoema {
 
 	private ConexaoBD conexao;
@@ -22,12 +24,14 @@ public class DAOPoema {
 		conexao.conectar();
 		
 		try {
-			PreparedStatement stm = conexao.getConexao().prepareStatement("INSERT INTO beans.poema(titulo, escopo,  media_avaliacoes, login_autor) VALUES(?,?,?,?)");
+			PreparedStatement stm = conexao.getConexao().prepareStatement("INSERT INTO beans.poema(data_hora, titulo, escopo, login_usuario) VALUES(?,?,?,?)");
 			
-			stm.setString(1, p.getTitulo());
-			stm.setString(2, p.getEscopo());
-			stm.setDouble(3, p.getMediaAvaliacao());
+			stm.setTimestamp(1, p.getDataHora());
+			stm.setString(2, p.getTitulo());
+			stm.setString(3, p.getEscopo());
 			stm.setString(4, p.getAutor().getLogin());
+			
+			stm.execute();
 			
 			
 		} catch (SQLException e) {

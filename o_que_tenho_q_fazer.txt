@@ -1,0 +1,5 @@
+- descobrir como fazer o delete on cascade pra excluir usuarios
+- atualizar repositório do git
+
+
+- A INSERÇÃO NO BANCO DÁ ERRADO QUANDO EU USO \n ISSO É UMA BOSTAAAAA

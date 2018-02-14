@@ -63,8 +63,6 @@ public class DAOUsuario {
 			
 			if(!resultado.next())
 				throw new AuthenticationException("não foi possível excluir o usuário.");
-			else
-				System.out.println("Usuário excluído.");
 			
 			// Os comandos SQL verificam se login E a senha correspondem
 			// ao que foi informado no menuExcluir() da UserInterface
@@ -74,6 +72,7 @@ public class DAOUsuario {
 			stm.setString(2, senha);
 			stm.execute();
 			
+			System.out.println("Usuário excluído.");
 			
 		} catch (SQLException e) {
 			System.out.println("Erro: " + e.getMessage());

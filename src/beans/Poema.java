@@ -1,18 +1,29 @@
-
-
 package beans;
+
+import java.sql.Timestamp;
 
 public class Poema {
 	
+	private int serial;
+	private Timestamp dataHora;
 	private String titulo;
 	private String escopo;
-	private double mediaAvaliacao;
 	private Usuario autor = new Usuario();
 
-	public Poema(String titulo, String escopo, Usuario autor) {
+	public Poema(Timestamp dataHora, String titulo, String escopo, Usuario autor) {
+		this.dataHora = dataHora;
 		this.titulo = titulo;
 		this.escopo = escopo;
 		this.autor = autor;
+	}
+	
+	public Poema(int serial, Timestamp dataHora, String titulo, String escopo, double mediaAvaliacao, Usuario autor) {
+		this.serial = serial;
+		this.dataHora = dataHora;
+		this.titulo = titulo;
+		this.escopo = escopo;
+		this.autor = autor;
+		
 	}
 	
 	public Poema() {
@@ -26,10 +37,6 @@ public class Poema {
 	public void setEscopo(String escopo) {
 		this.escopo = escopo;
 	}
-
-	public void setMediaAvaliacao(double mediaAvaliacao) {
-		this.mediaAvaliacao = mediaAvaliacao;
-	}
 	
 	public void setAutor(Usuario autor) {
 		this.autor = autor;
@@ -42,18 +49,26 @@ public class Poema {
 	public String getEscopo() {
 		return escopo;
 	}
-
-	public double getMediaAvaliacao() {
-		return mediaAvaliacao;
-	}
 	
 	public Usuario getAutor() {
 		return autor;
 	}
 	
+	public int getSerial() {
+		return serial;
+	}
+	
+	public Timestamp getDataHora() {
+		return dataHora;
+	}
+
+	public void setDataHora(Timestamp dataHora) {
+		this.dataHora = dataHora;
+	}
+
 	@Override
 	public String toString() {
-		return this.getTitulo() + "\n" + this.getEscopo() + "\n" + this.getAutor().getLogin() + " - " + this.getAutor().getPrimeiroNome()
+		return this.getDataHora() + "\n" + this.getTitulo() + "\n" + this.getEscopo() + "\n" + this.getAutor().getLogin() + " - " + this.getAutor().getPrimeiroNome()
 				+ " " + this.getAutor().getSobrenome();
 	}
 

@@ -10,13 +10,16 @@ public class Teste {
 	public static void main(String[] args) {
 		Scanner leitor = new Scanner(System.in);
 
+		System.out.println("Titulo: ");
+		String titulo = leitor.next();
 		String texto = "";
 		String linha = "";
 
 		System.out.println("Digite seu texto: (dê enter e digite -- para finalizar) ");
 		while (linha != "--") {
 			linha = leitor.nextLine();
-			texto = texto + "\n" + linha;
+			char c = 13;
+			texto = texto + c + linha;
 			switch (linha) {
 			case ("--"):
 				linha = "--";
@@ -24,9 +27,7 @@ public class Teste {
 			default:
 				break;
 			}
-			System.out.println(texto);
 		}
 
 	}
-
 }
