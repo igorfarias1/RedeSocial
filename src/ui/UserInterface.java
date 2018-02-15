@@ -126,6 +126,7 @@ public class UserInterface {
 				System.out.println("1 - Buscar por usuário");
 				System.out.println("2 - Amizades");
 				System.out.println("3 - Publicar poema");
+				System.out.println("4 - Enviar Direct Message");
 				System.out.println("0 - Encerrar a sessão");
 				System.out.print("Escolha uma opção: ");
 				opcao = leitor.nextInt();
@@ -140,6 +141,8 @@ public class UserInterface {
 				case (3):
 					interfacePost();
 					break;
+				case (4):
+					interfaceMensagem();
 				case (0):
 					break;
 				default:
@@ -176,6 +179,7 @@ public class UserInterface {
 				break;
 			case (3):
 				interfaceVerAmigos();
+				break;
 			case (0):
 				break;
 			default:
@@ -227,6 +231,16 @@ public class UserInterface {
 		//Publica um novo poema
 		//PROBLEMA AO IMPLEMENTAR ESSE MÉTODO:
 		//O Banco não aceita a inserção de um valor para o escopo com quebra de linha
+	}
+	
+	public void interfaceMensagem() {
+		System.out.print("Destinatário da mensagem: ");
+		String loginDestinatario = leitor.next();
+		
+		System.out.println("Digite sua mensagem (limite 140 caracteres):");
+		String texto = leitor.nextLine();
+		
+		fachada.enviarMensagem(texto, loginDestinatario);
 	}
 
 }
