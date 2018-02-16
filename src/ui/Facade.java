@@ -15,6 +15,12 @@ public class Facade {
 	private DAOMensagem conexaoMensagem = new DAOMensagem();
 	private Usuario usuarioLogado = new Usuario();
 
+	
+	private Usuario acharDestinatario(String busca) throws UserNotFoundException {
+		return conexaoUsuario.buscarDestinatario(busca);
+
+	}
+	
 	public void login(String login, String senha) throws AuthenticationException {
 		conexaoUsuario.validarLogin(login, senha);
 		usuarioLogado.setLogin(login);
@@ -30,11 +36,6 @@ public class Facade {
 		conexaoAmizade.removerAmigo(usuarioLogado.getLogin(), loginAmigo);
 	}
 
-	public ArrayList<Usuario> buscarUsuario(String busca) {
-		return conexaoUsuario.buscarUsuario(busca);
-
-	}
-
 	public ArrayList<Usuario> verAmigos() {
 		return conexaoAmizade.listarAmigos(usuarioLogado.getLogin());
 	}
@@ -47,10 +48,10 @@ public class Facade {
 
 	}
 
-	public void enviarMensagem(String texto, String loginRemetente) {
+	public void enviarMensagem(String texto, String loginDestinatario) {
 		Timestamp t = Timestamp.valueOf(LocalDateTime.now());
 		try {
-			Usuario destinatario = buscarUsuario(loginRemetente).get(0);
+			Usuario destinatario = acharDestinatario(loginDestinatario);
 			Mensagem novaMensagem = new Mensagem(t, usuarioLogado, destinatario, texto);
 
 			conexaoMensagem.enviarMensagem(novaMensagem);
@@ -59,6 +60,10 @@ public class Facade {
 			System.out.println(e.getMessage());
 		}
 
+	}
+	
+	public ArrayList<Mensagem> verMensagens() {
+		return conexaoMensagem.listarMensagens(usuarioLogado.getLogin());
 	}
 
 }

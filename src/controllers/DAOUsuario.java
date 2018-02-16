@@ -51,19 +51,21 @@ public class DAOUsuario {
 	}
 
 	// Método que recebe, por questão de segurança, o login e a senha do usuário
-	// Exclui um usuário do banco de dados e lança uma checked exception, caso não seja encontrado usuário 
+	// Exclui um usuário do banco de dados e lança uma checked exception, caso não
+	// seja encontrado usuário
 	// com o login informado ou o login e a senha informados não correspondam
 	public void excluirUsuario(String login, String senha) throws AuthenticationException {
 		// abrindo a conexão com o BD
 		conexao.conectar();
-		
+
 		try {
-			
-			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.usuario WHERE login = '" + login + "' AND senha = '" + senha + "';");
-			
-			if(!resultado.next())
+
+			ResultSet resultado = conexao.executarSQL(
+					"SELECT * FROM beans.usuario WHERE login = '" + login + "' AND senha = '" + senha + "';");
+
+			if (!resultado.next())
 				throw new AuthenticationException("não foi possível excluir o usuário.");
-			
+
 			// Os comandos SQL verificam se login E a senha correspondem
 			// ao que foi informado no menuExcluir() da UserInterface
 			PreparedStatement stm = conexao.getConexao()
@@ -71,9 +73,9 @@ public class DAOUsuario {
 			stm.setString(1, login);
 			stm.setString(2, senha);
 			stm.execute();
-			
+
 			System.out.println("Usuário excluído.");
-			
+
 		} catch (SQLException e) {
 			System.out.println("Erro: " + e.getMessage());
 		} finally {
@@ -83,8 +85,8 @@ public class DAOUsuario {
 	}
 
 	// Busca um usuário por parte do seu nome, sobrenome ou login
-	public ArrayList<Usuario> buscarUsuario(String palavraDeBusca) {
-		
+	public ArrayList<Usuario> buscarUsuario(String palavraDeBusca) throws UserNotFoundException {
+
 		conexao.conectar();
 		ArrayList<Usuario> usuarios = new ArrayList<>();
 
@@ -95,15 +97,19 @@ public class DAOUsuario {
 						+ palavraDeBusca + "%'" + " OR sobrenome LIKE '%" + palavraDeBusca + "%';");
 
 		try {
-			while (resultado.next()) {
-				String login = resultado.getString("login");
-				String senha = resultado.getString("senha");
-				String email = resultado.getString("email");
-				String primeiroNome = resultado.getString("primeiro_nome");
-				String sobrenome = resultado.getString("sobrenome");
-				String profissao = resultado.getString("profissao");
-				
-				usuarios.add(new Usuario(login, senha, email, primeiroNome, sobrenome, profissao));
+			if (!resultado.next()) {
+				throw new UserNotFoundException();
+			} else {
+				do {
+					String login = resultado.getString("login");
+					String senha = resultado.getString("senha");
+					String email = resultado.getString("email");
+					String primeiroNome = resultado.getString("primeiro_nome");
+					String sobrenome = resultado.getString("sobrenome");
+					String profissao = resultado.getString("profissao");
+
+					usuarios.add(new Usuario(login, senha, email, primeiroNome, sobrenome, profissao));
+				} while (resultado.next());
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro: " + e.getMessage());
@@ -111,18 +117,20 @@ public class DAOUsuario {
 			conexao.desconectar();
 		}
 
-		
 		return usuarios;
 	}
-	
-	// Verifica se um login e uma senha correspondem e lança uma checked exception (AuthenticationException),
-	// caso não seja encontrado usuário com o login informado ou o login e a senha informados não correspondam
-	public void validarLogin(String login, String senha) throws AuthenticationException{
+
+	// Verifica se um login e uma senha correspondem e lança uma checked exception
+	// (AuthenticationException),
+	// caso não seja encontrado usuário com o login informado ou o login e a senha
+	// informados não correspondam
+	public void validarLogin(String login, String senha) throws AuthenticationException {
 		conexao.conectar();
-		
+
 		try {
-			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.usuario WHERE login = '" + login +"' AND senha = '" + senha + "';");
-			if(!resultado.next()) {
+			ResultSet resultado = conexao.executarSQL(
+					"SELECT * FROM beans.usuario WHERE login = '" + login + "' AND senha = '" + senha + "';");
+			if (!resultado.next()) {
 				throw new AuthenticationException("não foi possível fazer login.");
 			}
 		} catch (SQLException e) {
@@ -130,10 +138,43 @@ public class DAOUsuario {
 		} finally {
 			conexao.desconectar();
 		}
-		
+
 	}
 	
-	
+	//Busca especificamente por um único usuario
+	//Metodo usado apenas quando é preciso haver o envio de um mensagem direta
+	public Usuario buscarDestinatario(String palavraDeBusca) throws UserNotFoundException {
 
-	
+		conexao.conectar();
+		Usuario u = new Usuario();
+
+		// Procura no banco de dados os usuarios que possuem palavraDeBusca no seu
+		// login, nome ou sobrenome
+		ResultSet resultado = conexao.executarSQL(
+				"SELECT * FROM beans.usuario WHERE login = '%"+ palavraDeBusca + "%';");
+
+		try {
+			if (!resultado.next()) {
+				throw new UserNotFoundException();
+			} else {
+				do {
+					String login = resultado.getString("login");
+					String senha = resultado.getString("senha");
+					String email = resultado.getString("email");
+					String primeiroNome = resultado.getString("primeiro_nome");
+					String sobrenome = resultado.getString("sobrenome");
+					String profissao = resultado.getString("profissao");
+
+					u = new Usuario(login, senha, email, primeiroNome, sobrenome, profissao);
+				} while (resultado.next());
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro: " + e.getMessage());
+		} finally {
+			conexao.desconectar();
+		}
+
+		return u;
+	}
+
 }

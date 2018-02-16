@@ -1,10 +1,9 @@
 package ui;
 
 import java.util.Scanner;
+
+import beans.Mensagem;
 import exceptions.*;
-import java.nio.ShortBuffer;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class UserInterface {
@@ -103,8 +102,13 @@ public class UserInterface {
 		String palavra = leitor.next();
 
 		// Salva o resultado da busca em um ArrayList<Usuario> e imprime o resultado
-		ArrayList resultado = fachadaNoLogin.buscarUsuario(palavra);
-		System.out.println(resultado);
+		try {
+			ArrayList resultado = fachadaNoLogin.buscarUsuario(palavra);
+			System.out.println(resultado);
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	// Menu ativado a partir do menuInicial (opção 2)
@@ -127,6 +131,7 @@ public class UserInterface {
 				System.out.println("2 - Amizades");
 				System.out.println("3 - Publicar poema");
 				System.out.println("4 - Enviar Direct Message");
+				System.out.println("5 - Ver suas mensagens");
 				System.out.println("0 - Encerrar a sessão");
 				System.out.print("Escolha uma opção: ");
 				opcao = leitor.nextInt();
@@ -143,6 +148,10 @@ public class UserInterface {
 					break;
 				case (4):
 					interfaceMensagem();
+					break;
+				case (5):
+					verMensagens();
+					break;
 				case (0):
 					break;
 				default:
@@ -226,21 +235,69 @@ public class UserInterface {
 		System.out.println(fachada.verAmigos());
 	}
 
-	//Interface ativada a partir do menuLogin
+	// Interface ativada a partir do menuLogin
 	public void interfacePost() {
-		//Publica um novo poema
-		//PROBLEMA AO IMPLEMENTAR ESSE MÉTODO:
-		//O Banco não aceita a inserção de um valor para o escopo com quebra de linha
+		// Publica um novo poema
+		// PROBLEMA AO IMPLEMENTAR ESSE MÉTODO:
+		// O Banco não aceita a inserção de um valor para o escopo com quebra de linha
 	}
-	
+
 	public void interfaceMensagem() {
 		System.out.print("Destinatário da mensagem: ");
 		String loginDestinatario = leitor.next();
-		
+
+		leitor.nextLine();
+
 		System.out.println("Digite sua mensagem (limite 140 caracteres):");
 		String texto = leitor.nextLine();
-		
+
 		fachada.enviarMensagem(texto, loginDestinatario);
 	}
 
+	public void verMensagens() {
+		System.out.println("Mensagens ordenadas pelas mais recentes");
+		ArrayList<Mensagem> mensagens = fachada.verMensagens();
+
+		int indiceAtual = mensagens.size() - 1;
+		Mensagem mensagemAtual = mensagens.get(indiceAtual);
+		int opcao = -1;
+
+		while (opcao != 0 || indiceAtual >= 0) {
+			System.out.println(mensagemAtual);
+			if (indiceAtual == mensagens.size() - 1) {
+				System.out.println("1 - Próxima mensagem");
+				System.out.println("0 - Sair das mensagens");
+				System.out.println("Escolha uma opção: ");
+
+				switch (opcao) {
+				case (1):
+					indiceAtual--;
+					break;
+				case (0):
+					break;
+				default:
+					System.out.println("Opção inválida");
+				}
+			} else {
+				System.out.println("1 - Próxima mensagem");
+				System.out.println("2 - Mensagem anterior");
+				System.out.println("0 - Sair das mensagens");
+				System.out.println("Escolha uma opção: ");
+
+				switch (opcao) {
+				case (1):
+					indiceAtual--;
+					break;
+				case (2):
+					indiceAtual++;
+				case (0):
+					break;
+				default:
+					System.out.println("Opção inválida");
+				}
+			}
+
+		}
+
+	}
 }

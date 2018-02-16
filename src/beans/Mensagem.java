@@ -72,7 +72,9 @@ public class Mensagem {
 
 	@Override
 	public String toString() {
-		return "------------\nDe: " 
+		return "------------\n"
+				+ this.getDataHora()
+				+ "\nDe: " 
 				+ remetente.getLogin() 
 				+ "\nPara: " 
 				+ destinatario.getLogin() 

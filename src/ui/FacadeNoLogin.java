@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import beans.Usuario;
 import controllers.DAOUsuario;
 import exceptions.AuthenticationException;
+import exceptions.UserNotFoundException;
 
 public class FacadeNoLogin {
 	
@@ -19,7 +20,7 @@ public class FacadeNoLogin {
 		conexaoUsuario.excluirUsuario(login, senha);
 	}
 
-	public ArrayList<Usuario> buscarUsuario(String busca) {
+	public ArrayList<Usuario> buscarUsuario(String busca) throws UserNotFoundException{
 		return conexaoUsuario.buscarUsuario(busca);
 
 	}
