@@ -131,7 +131,7 @@ public class UserInterface {
 				System.out.println("2 - Amizades");
 				System.out.println("3 - Publicar poema");
 				System.out.println("4 - Enviar Direct Message");
-				System.out.println("5 - Ver suas mensagens");
+//				System.out.println("5 - Ver suas mensagens");
 				System.out.println("0 - Encerrar a sessão");
 				System.out.print("Escolha uma opção: ");
 				opcao = leitor.nextInt();
@@ -149,9 +149,9 @@ public class UserInterface {
 				case (4):
 					interfaceMensagem();
 					break;
-				case (5):
-					verMensagens();
-					break;
+//				case (5):
+//					verMensagens();
+//					break;
 				case (0):
 					break;
 				default:
@@ -254,6 +254,8 @@ public class UserInterface {
 		fachada.enviarMensagem(texto, loginDestinatario);
 	}
 
+	/*
+	 * ESSA FUNCIONALIDADE NÃO ESTÁ FUNCIONANDO POR ENQUANTO
 	public void verMensagens() {
 		System.out.println("Mensagens ordenadas pelas mais recentes");
 		ArrayList<Mensagem> mensagens = fachada.verMensagens();
@@ -299,5 +301,5 @@ public class UserInterface {
 
 		}
 
-	}
+	}*/
 }

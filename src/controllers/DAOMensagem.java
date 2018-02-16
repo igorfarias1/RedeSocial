@@ -43,13 +43,14 @@ public class DAOMensagem {
 		}
 	}
 	
+	
 	public ArrayList<Mensagem> listarMensagens(String loginUsuario) {
 		conexao.conectar();
 		ArrayList<Mensagem> mensagens = new ArrayList<>();
 		
 		try {
 			
-			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.mensagem WHERE remetente = '%" 
+			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.mensagem WHERE destinatario = '%" 
 			+ loginUsuario + "%';");
 			
 			while (resultado.next()) {
