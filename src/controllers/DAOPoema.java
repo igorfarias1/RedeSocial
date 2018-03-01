@@ -79,5 +79,59 @@ public class DAOPoema {
 		return listaPoemas;
 
 	}
+	
+	public ArrayList<Poema> exibirPoemasDoUsuario(String loginUsuario) {
+		conexao.conectar();
+		
+		ArrayList<Poema> listaPoemas = new ArrayList();
+
+		ResultSet set = conexao.executarSQL(
+				"SELECT id, data_hora, autor, escopo, titulo FROM beans.poema WHERE autor = '"
+						+ loginUsuario + "' ORDER BY data_hora DESC;");
+
+		try {
+			while (set.next()) {
+				
+				int serial = set.getInt("id");
+				Timestamp dataHora = set.getTimestamp("data_hora");
+				String loginAutor = set.getString("autor");
+				String escopo = set.getString("escopo");
+				String titulo = set.getString("titulo");
+				
+				Poema p = new Poema();
+				
+				p.setDataHora(dataHora);
+				p.setSerial(serial);
+				p.setEscopo(escopo);
+				p.setTitulo(titulo);
+				p.getAutor().setLogin(loginAutor);
+				
+				listaPoemas.add(p);
+								
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			conexao.desconectar();
+		}
+		
+		return listaPoemas;
+	}
+	
+	public void apagarPoema(int serial) {
+		conexao.conectar();
+		
+		try {
+			PreparedStatement stm = conexao.getConexao().prepareStatement("DELETE FROM beans.poema WHERE id = ?");
+			
+			stm.setInt(1, serial);
+			
+			stm.execute();
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
 
 }

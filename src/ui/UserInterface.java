@@ -1,6 +1,9 @@
 package ui;
 
 import java.util.Scanner;
+
+import beans.Comentario;
+import beans.Poema;
 import exceptions.*;
 import java.util.ArrayList;
 
@@ -128,9 +131,10 @@ public class UserInterface {
 				System.out.println("1 - Buscar por usuário");
 				System.out.println("2 - Amizades");
 				System.out.println("3 - Publicar poema");
-				System.out.println("4 - Feed de poemas");
-				System.out.println("5 - Enviar Direct Message");
-				System.out.println("6 - Ver suas mensagens");
+				System.out.println("4 - Meus poemas");
+				System.out.println("5 - Feed de poemas");
+				System.out.println("6 - Enviar Direct Message");
+				System.out.println("7 - Ver suas mensagens");
 				System.out.println("0 - Encerrar a sessão");
 				System.out.print("Escolha uma opção: ");
 				opcao = leitor.nextInt();
@@ -146,12 +150,15 @@ public class UserInterface {
 					interfacePost();
 					break;
 				case (4):
-					feedPoemas();
+					meusPoemas();
 					break;
 				case (5):
-					interfaceMensagem();
+					feedPoemas();
 					break;
 				case (6):
+					interfaceMensagem();
+					break;
+				case (7):
 					verMensagens();
 					break;
 				case (0):
@@ -339,15 +346,21 @@ public class UserInterface {
 	}
 	
 	public void feedPoemas() {
-		System.out.println("Feed de poemas");
-		ArrayList poemas = fachada.verPoemasDeAmigos();
+		System.out.println("\nFeed de poemas");
+		ArrayList<Poema> poemas = fachada.verPoemasDeAmigos();
 
 		int cont = 0;
+		if(poemas.size() == 0) {
+			System.out.println("\nNão há poemas a serem mostrados.");
+		}
+		
 		while (cont < poemas.size()) {
 			System.out.println(poemas.get(cont));
 
 			if (cont == 0) {
 				System.out.println("1 - Próximo poema");
+				System.out.println("2 - Comentar");
+				System.out.println("3 - Ver comentários deste poema");
 				System.out.println("0 - Sair");
 				System.out.print("Escolha uma opção: ");
 				int opcao = leitor.nextInt();
@@ -355,6 +368,12 @@ public class UserInterface {
 				switch (opcao) {
 				case (1):
 					cont++;
+					break;
+				case (2):
+					comentar(poemas.get(cont).getSerial());
+					break;
+				case (3):
+					verComentarios(poemas.get(cont).getSerial());
 					break;
 				case (0):
 					cont = poemas.size();
@@ -365,6 +384,8 @@ public class UserInterface {
 				}
 			} else if (cont == poemas.size() - 1) {
 				System.out.println("1 - Poema anterior");
+				System.out.println("2 - Comentar");
+				System.out.println("3 - Ver comentários deste poema");
 				System.out.println("0 - Sair");
 				System.out.print("Escolha uma opção: ");
 				int opcao = leitor.nextInt();
@@ -372,6 +393,12 @@ public class UserInterface {
 				switch (opcao) {
 				case (1):
 					cont--;
+					break;
+				case (2):
+					comentar(poemas.get(cont).getSerial());
+					break;
+				case (3):
+					verComentarios(poemas.get(cont).getSerial());
 					break;
 				case (0):
 					cont = poemas.size();
@@ -381,7 +408,9 @@ public class UserInterface {
 				}
 			} else {
 				System.out.println("1 - Próximo poema");
-				System.out.println("2 - Poema anterior");
+				System.out.println("2 - Comentar");
+				System.out.println("3 - Ver comentários deste poema");
+				System.out.println("4 - Poema anterior");
 				System.out.println("0 - Sair");
 				System.out.print("Escolha uma opção: ");
 				int opcao = leitor.nextInt();
@@ -391,6 +420,12 @@ public class UserInterface {
 					cont++;
 					break;
 				case (2):
+					comentar(poemas.get(cont).getSerial());
+					break;
+				case (3):
+					verComentarios(poemas.get(cont).getSerial());
+					break;
+				case (4):
 					cont--;
 					break;
 				case (0):
@@ -404,6 +439,192 @@ public class UserInterface {
 		}
 	}
 	
-	
+	public void meusPoemas() {
+		System.out.println("\nMeus poemas");
+		ArrayList<Poema> poemas = fachada.verPoemasDeUsuario();
 
+		int cont = 0;
+		if(poemas.size() == 0) {
+			System.out.println("\nVocê não possui poemas publicados.");
+		}
+		
+		while (cont < poemas.size()) {
+			System.out.println(poemas.get(cont));
+
+			if (cont == 0) {
+				System.out.println("1 - Próximo poema");
+				System.out.println("2 - Apagar poema");
+				System.out.println("3 - Comentar");
+				System.out.println("4 - Ver comentários deste poema");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont++;
+					break;
+				case (2):
+					fachada.excluirPoema(poemas.get(cont).getSerial());
+					cont++;
+					break;
+				case (3):
+					comentar(poemas.get(cont).getSerial());
+					break;
+				case (4):
+					verComentarios(poemas.get(cont).getSerial());
+					break;
+				case (0):
+					cont = poemas.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
+			} else if (cont == poemas.size() - 1) {
+				System.out.println("1 - Poema anterior");
+				System.out.println("2 - Apagar poema");
+				System.out.println("3 - Comentar");
+				System.out.println("4 - Ver comentários deste poema");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont--;
+					break;
+				case (2):
+					fachada.excluirPoema(poemas.get(cont).getSerial());
+					cont++;
+					break;
+				case (3):
+					comentar(poemas.get(cont).getSerial());
+					break;
+				case (4):
+					verComentarios(poemas.get(cont).getSerial());
+					break;
+				case (0):
+					cont = poemas.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+				}
+			} else {
+				System.out.println("1 - Próximo poema");
+				System.out.println("2 - Apagar poema");
+				System.out.println("3 - Comentar");
+				System.out.println("4 - Ver comentários deste poema");
+				System.out.println("5 - Poema anterior");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont++;
+					break;
+				case (2):
+					fachada.excluirPoema(poemas.get(cont).getSerial());
+					cont++;
+					break;
+				case (3):
+					comentar(poemas.get(cont).getSerial());
+					break;
+				case (4):
+					verComentarios(poemas.get(cont).getSerial());
+					break;
+				case (5):
+					cont--;
+					break;
+				case (0):
+					cont = poemas.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
+			}
+		}
+	}
+	
+	public void comentar(int serialPoema) {
+		leitor.nextLine();
+		System.out.println("Digite seu comentário: ");
+		String corpo = leitor.nextLine();
+		
+		fachada.criarComentario(corpo, serialPoema);
+		
+	}	
+
+	public void verComentarios(int serialPoema) {
+		System.out.println("\nComentários deste poema");
+		ArrayList<Comentario> comentarios = fachada.verComentariosDePoema(serialPoema);
+
+		int cont = 0;
+		if(comentarios.size() == 0) {
+			System.out.println("\nEsse poema não possui comentários.");
+		}
+		
+		while (cont < comentarios.size()) {
+			System.out.println(comentarios.get(cont));
+
+			if (cont == 0) {
+				System.out.println("1 - Próximo comentario");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont++;
+					break;
+				case (0):
+					cont = comentarios.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
+			} else if (cont == comentarios.size() - 1) {
+				System.out.println("1 - Comentário anterior");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont--;
+					break;
+				case (0):
+					cont = comentarios.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+				}
+			} else {
+				System.out.println("1 - Próximo comentário");
+				System.out.println("2 - Comentário anterior");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont++;
+					break;
+				case (2):
+					cont--;
+					break;
+				case (0):
+					cont = comentarios.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
+			}
+		}
+	}
+	
 }

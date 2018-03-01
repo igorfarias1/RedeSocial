@@ -13,6 +13,7 @@ public class Facade {
 	private DAOAmizade conexaoAmizade = new DAOAmizade();
 	private DAOPoema conexaoPoema = new DAOPoema();
 	private DAOMensagem conexaoMensagem = new DAOMensagem();
+	private DAOComentario conexaoComentario = new DAOComentario();
 	private Usuario usuarioLogado = new Usuario();
 
 	
@@ -70,4 +71,29 @@ public class Facade {
 		return conexaoPoema.exibirPoemasDeAmigos(usuarioLogado.getLogin());
 	}
 
+	public ArrayList<Poema> verPoemasDeUsuario(){
+		return conexaoPoema.exibirPoemasDoUsuario(usuarioLogado.getLogin());
+	}
+	
+	public void excluirPoema(int serial) {
+		conexaoPoema.apagarPoema(serial);
+	}
+	
+	public void criarComentario(String corpo, int serial) {
+		Comentario novoComentario = new Comentario();
+		Timestamp t = Timestamp.valueOf(LocalDateTime.now());
+		Poema p = new Poema();
+		p.setSerial(serial);
+		
+		novoComentario.setAutor(usuarioLogado);
+		novoComentario.setCorpo(corpo);
+		novoComentario.setDataHora(t);
+		novoComentario.setPoema(p);
+		
+		conexaoComentario.criarComentario(novoComentario);
+	}
+	
+	public ArrayList<Comentario> verComentariosDePoema(int serial){
+		return conexaoComentario.listarComentarios(serial);
+	}
 }

@@ -72,7 +72,7 @@ public class Poema {
 
 	@Override
 	public String toString() {
-		return "\n-----------\n" + this.getDataHora() + "\n" + this.getTitulo() + "\n" + this.getEscopo() + "\n\nPostado por: " + this.getAutor().getLogin() + "\n-----------\n";
+		return "\n-----------\n" + this.getDataHora() + "\n" + this.getTitulo() + "\n\n" + this.getEscopo() + "\n\nPostado por: " + this.getAutor().getLogin() + "\n-----------\n";
 	}
 
 }
