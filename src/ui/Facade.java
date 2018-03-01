@@ -65,5 +65,9 @@ public class Facade {
 	public ArrayList<Mensagem> verMensagens() {
 		return conexaoMensagem.listarMensagens(usuarioLogado.getLogin());
 	}
+	
+	public ArrayList<Poema> verPoemasDeAmigos(){
+		return conexaoPoema.exibirPoemasDeAmigos(usuarioLogado.getLogin());
+	}
 
 }

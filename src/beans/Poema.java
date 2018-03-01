@@ -66,10 +66,13 @@ public class Poema {
 		this.dataHora = dataHora;
 	}
 
+	public void setSerial(int serial) {
+		this.serial = serial;
+	}
+
 	@Override
 	public String toString() {
-		return this.getDataHora() + "\n" + this.getTitulo() + "\n" + this.getEscopo() + "\n" + this.getAutor().getLogin() + " - " + this.getAutor().getPrimeiroNome()
-				+ " " + this.getAutor().getSobrenome();
+		return "\n-----------\n" + this.getDataHora() + "\n" + this.getTitulo() + "\n" + this.getEscopo() + "\n\nPostado por: " + this.getAutor().getLogin() + "\n-----------\n";
 	}
 
 }

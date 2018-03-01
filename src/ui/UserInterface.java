@@ -1,8 +1,6 @@
 package ui;
 
 import java.util.Scanner;
-
-import beans.Mensagem;
 import exceptions.*;
 import java.util.ArrayList;
 
@@ -130,8 +128,9 @@ public class UserInterface {
 				System.out.println("1 - Buscar por usuário");
 				System.out.println("2 - Amizades");
 				System.out.println("3 - Publicar poema");
-				System.out.println("4 - Enviar Direct Message");
-//				System.out.println("5 - Ver suas mensagens");
+				System.out.println("4 - Feed de poemas");
+				System.out.println("5 - Enviar Direct Message");
+				System.out.println("6 - Ver suas mensagens");
 				System.out.println("0 - Encerrar a sessão");
 				System.out.print("Escolha uma opção: ");
 				opcao = leitor.nextInt();
@@ -147,11 +146,14 @@ public class UserInterface {
 					interfacePost();
 					break;
 				case (4):
+					feedPoemas();
+					break;
+				case (5):
 					interfaceMensagem();
 					break;
-//				case (5):
-//					verMensagens();
-//					break;
+				case (6):
+					verMensagens();
+					break;
 				case (0):
 					break;
 				default:
@@ -238,11 +240,23 @@ public class UserInterface {
 	// Interface ativada a partir do menuLogin
 	public void interfacePost() {
 		// Publica um novo poema
-		// PROBLEMA AO IMPLEMENTAR ESSE MÉTODO:
-		// O Banco não aceita a inserção de um valor para o escopo com quebra de linha
+		// Por hora, não será possível fazer um post de poema com quebras de linhas
+		// Mas fica a dica pra Igor e Hemilly do futuro
+		
+		leitor.nextLine();
+		
+		System.out.println("Título: ");
+		String titulo = leitor.nextLine();
+		
+		System.out.println("Escopo: ");
+		String escopo = leitor.nextLine();
+		
+		fachada.publicarPoema(titulo, escopo);
+		
 	}
 
 	public void interfaceMensagem() {
+		leitor.nextLine();
 		System.out.print("Destinatário da mensagem: ");
 		String loginDestinatario = leitor.next();
 
@@ -254,28 +268,46 @@ public class UserInterface {
 		fachada.enviarMensagem(texto, loginDestinatario);
 	}
 
-	/*
-	 * ESSA FUNCIONALIDADE NÃO ESTÁ FUNCIONANDO POR ENQUANTO
 	public void verMensagens() {
+		// Mostra ao usuário as suas últimas mensagens recebidas
+		// ordenadas em ordem decrescente de data/hora de envio
+
 		System.out.println("Mensagens ordenadas pelas mais recentes");
-		ArrayList<Mensagem> mensagens = fachada.verMensagens();
+		ArrayList mensagens = fachada.verMensagens();
 
-		int indiceAtual = mensagens.size() - 1;
-		Mensagem mensagemAtual = mensagens.get(indiceAtual);
-		int opcao = -1;
+		int cont = 0;
+		while (cont < mensagens.size()) {
+			System.out.println(mensagens.get(cont));
 
-		while (opcao != 0 || indiceAtual >= 0) {
-			System.out.println(mensagemAtual);
-			if (indiceAtual == mensagens.size() - 1) {
+			if (cont == 0) {
 				System.out.println("1 - Próxima mensagem");
-				System.out.println("0 - Sair das mensagens");
-				System.out.println("Escolha uma opção: ");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
 
 				switch (opcao) {
 				case (1):
-					indiceAtual--;
+					cont++;
 					break;
 				case (0):
+					cont = mensagens.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
+			} else if (cont == mensagens.size() - 1) {
+				System.out.println("1 - Mensagem anterior");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont--;
+					break;
+				case (0):
+					cont = mensagens.size();
 					break;
 				default:
 					System.out.println("Opção inválida");
@@ -283,23 +315,95 @@ public class UserInterface {
 			} else {
 				System.out.println("1 - Próxima mensagem");
 				System.out.println("2 - Mensagem anterior");
-				System.out.println("0 - Sair das mensagens");
-				System.out.println("Escolha uma opção: ");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
 
 				switch (opcao) {
 				case (1):
-					indiceAtual--;
+					cont++;
 					break;
 				case (2):
-					indiceAtual++;
+					cont--;
+					break;
 				case (0):
+					cont = mensagens.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
+			}
+		}
+
+	}
+	
+	public void feedPoemas() {
+		System.out.println("Feed de poemas");
+		ArrayList poemas = fachada.verPoemasDeAmigos();
+
+		int cont = 0;
+		while (cont < poemas.size()) {
+			System.out.println(poemas.get(cont));
+
+			if (cont == 0) {
+				System.out.println("1 - Próximo poema");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont++;
+					break;
+				case (0):
+					cont = poemas.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
+			} else if (cont == poemas.size() - 1) {
+				System.out.println("1 - Poema anterior");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont--;
+					break;
+				case (0):
+					cont = poemas.size();
 					break;
 				default:
 					System.out.println("Opção inválida");
 				}
+			} else {
+				System.out.println("1 - Próximo poema");
+				System.out.println("2 - Poema anterior");
+				System.out.println("0 - Sair");
+				System.out.print("Escolha uma opção: ");
+				int opcao = leitor.nextInt();
+
+				switch (opcao) {
+				case (1):
+					cont++;
+					break;
+				case (2):
+					cont--;
+					break;
+				case (0):
+					cont = poemas.size();
+					break;
+				default:
+					System.out.println("Opção inválida");
+					break;
+				}
 			}
-
 		}
+	}
+	
+	
 
-	}*/
 }

@@ -151,13 +151,12 @@ public class DAOUsuario {
 		// Procura no banco de dados os usuarios que possuem palavraDeBusca no seu
 		// login, nome ou sobrenome
 		ResultSet resultado = conexao.executarSQL(
-				"SELECT * FROM beans.usuario WHERE login = '%"+ palavraDeBusca + "%';");
+				"SELECT * FROM beans.usuario WHERE login = '"+ palavraDeBusca + "';");
 
 		try {
 			if (!resultado.next()) {
 				throw new UserNotFoundException();
 			} else {
-				do {
 					String login = resultado.getString("login");
 					String senha = resultado.getString("senha");
 					String email = resultado.getString("email");
@@ -165,8 +164,13 @@ public class DAOUsuario {
 					String sobrenome = resultado.getString("sobrenome");
 					String profissao = resultado.getString("profissao");
 
-					u = new Usuario(login, senha, email, primeiroNome, sobrenome, profissao);
-				} while (resultado.next());
+					u.setLogin(login);
+					u.setSenha(senha);
+					u.setEmail(email);
+					u.setPrimeiroNome(primeiroNome);
+					u.setSobrenome(sobrenome);
+					u.setProfissao(profissao);
+					
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro: " + e.getMessage());

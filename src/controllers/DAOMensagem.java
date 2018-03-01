@@ -50,8 +50,8 @@ public class DAOMensagem {
 		
 		try {
 			
-			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.mensagem WHERE destinatario = '%" 
-			+ loginUsuario + "%';");
+			ResultSet resultado = conexao.executarSQL("SELECT * FROM beans.mensagem WHERE destinatario = '" 
+			+ loginUsuario + "' ORDER BY data_hora DESC;");
 			
 			while (resultado.next()) {
 				
